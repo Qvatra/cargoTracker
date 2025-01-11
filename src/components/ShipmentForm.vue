@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useShipmentStore } from '@/stores/shipments'
+import { VALID_VESSELS } from '@/constants/vessels'
 
 const store = useShipmentStore()
 
@@ -54,13 +55,17 @@ async function handleSubmit() {
         <label for="vessel" class="block text-sm font-medium text-gray-700 mb-1">
           Vessel
         </label>
-        <input 
+        <select
           id="vessel"
           v-model="form.vessel"
-          type="text"
           required
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-white"
         >
+          <option value="">Select a vessel</option>
+          <option v-for="vessel in VALID_VESSELS" :key="vessel" :value="vessel">
+            {{ vessel }}
+          </option>
+        </select>
       </div>
       
       <div>
