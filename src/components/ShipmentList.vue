@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useShipmentStore } from '@/stores/shipments'
 import { api } from '@/services/api'
+import ShipmentCard from './ShipmentCard.vue'
+import type { EtaCheck } from '@/types/eta.ts'
 
 const store = useShipmentStore()
+const etaChecks = ref<Record<number, EtaCheck>>({})
+const checkingEtas = ref<Record<number, boolean>>({})
 
 onMounted(() => {
   store.fetchShipments()
@@ -15,33 +19,45 @@ async function checkVesselEta(shipmentId: number) {
     return
   }
 
+  checkingEtas.value[shipmentId] = true
+  
   try {
     const vessel = await api.getVessel(shipment.vessel)
     if (vessel['vessel-eta'] !== shipment['shipment-eta']) {
-      return {
+      etaChecks.value[shipmentId] = {
         hasDiscrepancy: true,
         vesselEta: vessel['vessel-eta'],
         shipmentEta: shipment['shipment-eta']
       }
+    } else {
+      etaChecks.value[shipmentId] = { hasDiscrepancy: false }
     }
-    return { hasDiscrepancy: false }
   } catch (e) {
     console.error(e)
-    return { hasDiscrepancy: false, error: 'Failed to check vessel ETA' }
+    etaChecks.value[shipmentId] = { 
+      hasDiscrepancy: false, 
+      error: 'Failed to check vessel ETA' 
+    }
+  } finally {
+    checkingEtas.value[shipmentId] = false
   }
 }
 
-async function updateShipmentEta(shipmentId: number, newEta: string) {
+async function updateShipmentEta(shipmentId: number) {
   const shipment = store.shipments.find(s => s.id === shipmentId)
-  if (!shipment) {
+  const check = etaChecks.value[shipmentId]
+  
+  if (!shipment || !check.vesselEta) {
     return
   }
-
+  
   try {
     await store.updateShipment(shipmentId, {
       ...shipment,
-      'shipment-eta': newEta
+      'shipment-eta': check.vesselEta
     })
+    // Clear the check after successful update
+    etaChecks.value[shipmentId] = { hasDiscrepancy: false }
   } catch (e) {
     console.error(e)
   }
@@ -67,36 +83,15 @@ async function updateShipmentEta(shipmentId: number, newEta: string) {
     </div>
     
     <div v-else class="space-y-4">
-      <div 
-        v-for="shipment in store.shipments" 
-        :key="shipment.id" 
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6"
-      >
-        <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-          Shipment #{{ shipment.id }}
-        </h3>
-        
-        <div class="space-y-2 mb-4">
-          <p class="text-gray-700 dark:text-gray-300">
-            <span class="font-medium">Customer:</span> {{ shipment.customer }}
-          </p>
-          <p class="text-gray-700 dark:text-gray-300">
-            <span class="font-medium">Vessel:</span> {{ shipment.vessel }}
-          </p>
-          <p class="text-gray-700 dark:text-gray-300">
-            <span class="font-medium">ETA:</span> {{ shipment['shipment-eta'] }}
-          </p>
-        </div>
-        
-        <div class="flex gap-2">
-          <button 
-            @click="checkVesselEta(shipment.id!)"
-            class="bg-primary hover:bg-primary-light text-white font-medium py-2 px-4 rounded-md transition-colors"
-          >
-            Check Vessel ETA
-          </button>
-        </div>
-      </div>
+      <ShipmentCard
+        v-for="shipment in store.shipments"
+        :key="shipment.id"
+        :shipment="shipment"
+        :eta-check="etaChecks[shipment.id!]"
+        :is-checking="checkingEtas[shipment.id!]"
+        @check-eta="checkVesselEta(shipment.id!)"
+        @update-eta="updateShipmentEta(shipment.id!)"
+      />
     </div>
   </div>
 </template> 
