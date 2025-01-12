@@ -1,31 +1,65 @@
 # Cargo Tracker
 
-A web interface for customer service agents to manage shipments.
+A Vue.js application for tracking cargo shipments and managing ETAs.
 
 ## Features
-
-- Register new shipments with customer, vessel, and ETA
-- View list of all registered shipments
-- Check vessel ETAs against shipment ETAs
+- Create new shipments
+- View registered shipments
+- Check vessel ETAs
 - Update shipment ETAs when discrepancies are found
 
 ## Technical Decisions
 
-- Used Vue 3 with TypeScript for type safety and better developer experience
-- Implemented Pinia for state management
-- Split components for better maintainability
-- Used Tailwind CSS for simplicity and fast styling
-- Native fetch API for simplicity
+### Form Validation
+For this project's scope and time constraints, we chose to use native HTML5 form validation instead of a more robust solution like Vuelidate. While Vuelidate would be more appropriate for larger projects due to its:
+- More complex validation rules
+- Custom error messages
+- Cross-field validation
+- Async validation support
+- Better i18n support
+
+The native validation sufficiently handles our basic needs:
+- Required fields
+- Date validation (preventing past dates)
+- Simple error messages
+
+### State Management
+- Uses Pinia for state management
+- Follows Options API pattern for better maintainability
+- Clear separation of concerns between components and store
 
 ## Project Setup
 
-```bash
+```sh
 npm install
+```
+
+### Development Server
+
+```sh
 npm run dev
 ```
 
-## Testing
+### Type-Check, Compile and Minify for Production
 
-```bash
+```sh
+npm run build
+```
+
+### Run Unit Tests with [Vitest](https://vitest.dev/)
+
+```sh
 npm run test:unit
+```
+
+### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+
+```sh
+npm run test:e2e:dev
+```
+
+### Lint with [ESLint](https://eslint.org/)
+
+```sh
+npm run lint
 ```

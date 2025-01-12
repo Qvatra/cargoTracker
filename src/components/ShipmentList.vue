@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useShipmentStore } from '@/stores/shipments'
 import { api } from '@/services/api'
 import ShipmentCard from './ShipmentCard.vue'
 import type { EtaCheck } from '@/types/eta.ts'
 
 const store = useShipmentStore()
+const { shipments, loading, error } = storeToRefs(store)
 const etaChecks = ref<Record<number, EtaCheck>>({})
 const checkingEtas = ref<Record<number, boolean>>({})
 
@@ -66,25 +68,25 @@ async function updateShipmentEta(shipmentId: number) {
 
 <template>
   <div class="max-w-4xl mx-auto">
-    <h2 class="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">
+    <h2 class="text-2xl font-semibold mb-6 text-gray-900">
       Registered Shipments
     </h2>
     
-    <div v-if="store.loading" class="text-center py-8 text-gray-600 dark:text-gray-400">
+    <div v-if="loading" class="text-center py-8 text-gray-600">
       Loading shipments...
     </div>
     
-    <div v-else-if="store.error" class="text-center py-8 text-error">
-      {{ store.error }}
+    <div v-else-if="error" class="text-center py-8 text-error">
+      {{ error }}
     </div>
     
-    <div v-else-if="store.shipments.length === 0" class="text-center py-8 text-gray-600 dark:text-gray-400">
+    <div v-else-if="!shipments?.length" class="text-center py-8 text-gray-600">
       No shipments registered yet.
     </div>
     
     <div v-else class="space-y-4">
       <ShipmentCard
-        v-for="shipment in store.shipments"
+        v-for="shipment in shipments"
         :key="shipment.id"
         :shipment="shipment"
         :eta-check="etaChecks[shipment.id!]"

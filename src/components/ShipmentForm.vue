@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useShipmentStore } from '@/stores/shipments'
 import { VALID_VESSELS } from '@/constants/vessels'
 
@@ -13,12 +13,23 @@ const form = ref({
 
 const error = ref<string | null>(null)
 
+// Get today's date in YYYY-MM-DD format
+const today = computed(() => {
+  const date = new Date()
+  return date.toISOString().split('T')[0]
+})
+
 async function handleSubmit() {
   error.value = null
   
+  // Validate ETA is not in the past
+  if (form.value['shipment-eta'] < today.value) {
+    error.value = 'ETA cannot be in the past'
+    return
+  }
+  
   try {
     await store.createShipment(form.value)
-
     form.value = {
       customer: '',
       vessel: '',
@@ -78,6 +89,7 @@ async function handleSubmit() {
           id="eta"
           v-model="form['shipment-eta']"
           type="date"
+          :min="today"
           required
           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
         >

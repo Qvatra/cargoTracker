@@ -18,7 +18,7 @@ defineEmits<{
 <template>
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
     <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-      Shipment #{{ shipment.id }}
+      #{{ shipment.id }}
     </h3>
     
     <div class="space-y-2 mb-4">
