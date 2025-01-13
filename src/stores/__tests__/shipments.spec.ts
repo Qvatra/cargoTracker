@@ -156,4 +156,33 @@ describe('Shipments Store', () => {
       expect(store.error).toBeNull()
     })
   })
+
+  describe('getters', () => {
+    it('hasShipments returns true when shipments exist', () => {
+      const store = useShipmentStore()
+      expect(store.hasShipments).toBe(false)
+      store.shipments = [{
+        id: 1,
+        customer: 'Test Customer',
+        vessel: 'CMA-CGM-CONCORDE',
+        'shipment-eta': '2025-01-01'
+      }]
+
+      expect(store.hasShipments).toBe(true)
+    })
+
+    it('getShipmentById returns correct shipment', () => {
+      const store = useShipmentStore()
+      const mockShipment = {
+        id: 1,
+        customer: 'Test Customer',
+        vessel: 'CMA-CGM-CONCORDE',
+        'shipment-eta': '2025-01-01'
+      }
+      store.shipments = [mockShipment]
+
+      expect(store.getShipmentById(1)).toEqual(mockShipment)
+      expect(store.getShipmentById(999)).toBeUndefined()
+    })
+  })
 }) 

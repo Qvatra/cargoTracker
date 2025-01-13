@@ -4,12 +4,16 @@ import ShipmentForm from '@/components/ShipmentForm.vue'
 import { ref } from 'vue'
 
 const showForm = ref(false)
+
+function toggleForm() {
+  showForm.value = !showForm.value
+}
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+  <div data-testid="app" class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <header class="py-8 sm:py-12">
+      <header data-testid="app-header" class="py-8 sm:py-12">
         <div class="flex justify-between items-center border-b border-gray-200 pb-6">
           <div>
             <h1 class="text-3xl font-bold text-gray-900">
@@ -20,7 +24,8 @@ const showForm = ref(false)
             </p>
           </div>
           <button 
-            @click="showForm = !showForm"
+            data-testid="new-shipment-button"
+            @click="toggleForm"
             class="inline-flex items-center px-4 py-2 bg-primary hover:bg-primary-light text-white text-sm font-medium rounded-md transition-colors shadow-sm"
           >
             <span v-if="!showForm" class="mr-2">
@@ -38,7 +43,7 @@ const showForm = ref(false)
         </div>
       </header>
 
-      <main>
+      <main data-testid="app-main">
         <div v-if="showForm" class="mb-8">
           <ShipmentForm @submit="showForm = false" />
         </div>

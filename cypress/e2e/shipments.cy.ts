@@ -1,13 +1,13 @@
 const createShipment = () => {
-    cy.get('form').should('not.exist')
-    cy.contains('button', 'New Shipment').click()
-    cy.get('form').should('exist')
-    cy.get('input[id="customer"]').type('Test Customer')
-    cy.get('select[id="vessel"]').select('CMA-CGM-CONCORDE')
-    cy.get('input[id="eta"]').type('2025-03-25')
-    cy.contains('button', 'Register Shipment').click()
-    cy.wait('@createShipment')
-    cy.get('form').should('not.exist')
+  cy.get('[data-testid="shipment-form"]').should('not.exist')
+  cy.get('[data-testid="new-shipment-button"]').click()
+  cy.get('[data-testid="shipment-form"]').should('exist')
+  cy.get('[data-testid="customer-input"]').type('Test Customer')
+  cy.get('[data-testid="vessel-select"]').select('CMA-CGM-CONCORDE')
+  cy.get('[data-testid="eta-input"]').type('2025-03-25')
+  cy.get('[data-testid="submit-button"]').click()
+  cy.wait('@createShipment')
+  cy.get('[data-testid="shipment-form"]').should('not.exist')
 }
 
 describe('Cargo Tracker', () => {
@@ -35,35 +35,31 @@ describe('Cargo Tracker', () => {
   it('can create a new shipment', () => {
     createShipment()
 
-    cy.contains('Test Customer')
-    cy.contains('CMA-CGM-CONCORDE')
-    cy.contains('2025-03-25')
+    cy.get('[data-testid="customer-info"]').should('contain', 'Test Customer')
+    cy.get('[data-testid="vessel-info"]').should('contain', 'CMA-CGM-CONCORDE')
+    cy.get('[data-testid="eta-info"]').should('contain', '2025-03-25')
   })
 
   it('can check vessel ETA', () => {
     createShipment()
 
-    // Check ETA
-    cy.contains('button', 'Check Vessel ETA').click()
+    cy.get('[data-testid="check-eta-button"]').first().click()
     cy.wait('@getVessel')
 
-    // Verify ETA discrepancy is shown
-    cy.contains('Vessel ETA (2024-03-26) differs from shipment ETA')
-    cy.contains('button', 'Update Shipment ETA')
+    cy.get('[data-testid="eta-discrepancy"]').should('be.visible')
+    cy.get('[data-testid="update-eta-button"]').should('be.visible')
   })
 
   it('can update shipment ETA', () => {
     createShipment()
 
-    // Check and update ETA
-    cy.contains('button', 'Check Vessel ETA').click()
+    cy.get('[data-testid="check-eta-button"]').first().click()
     cy.wait('@getVessel')
-    cy.contains('button', 'Update Shipment ETA').click()
+    cy.get('[data-testid="update-eta-button"]').first().click()
     cy.wait('@updateShipment')
 
-    // Verify the update
-    cy.contains('2024-03-26')
-    cy.contains('Vessel ETA (2024-03-26) differs').should('not.exist')
+    cy.get('[data-testid="eta-info"]').should('contain', '2024-03-26')
+    cy.get('[data-testid="eta-discrepancy"]').should('not.exist')
   })
 
   describe('Date validation', () => {
@@ -78,33 +74,35 @@ describe('Cargo Tracker', () => {
     })
 
     it('prevents creating shipment with past date', () => {
-      cy.contains('button', 'New Shipment').click()
-      cy.get('input[id="customer"]').type('Test Customer')
-      cy.get('select[id="vessel"]').select('CMA-CGM-CONCORDE')
-      cy.get('input[id="eta"]').type('2025-10-09')
-      cy.contains('button', 'Register Shipment').click()
+      cy.get('[data-testid="new-shipment-button"]').click()
+      cy.get('[data-testid="customer-input"]').type('Test Customer')
+      cy.get('[data-testid="vessel-select"]').select('CMA-CGM-CONCORDE')
+      cy.get('[data-testid="eta-input"]').type('2025-10-09')
+      cy.get('[data-testid="submit-button"]').click()
       
       cy.get('@createShipment.all').should('have.length', 0)
     })
 
     it('allows creating shipment with today date', () => {
-      cy.contains('button', 'New Shipment').click()
-      cy.get('input[id="customer"]').type('Test Customer')
-      cy.get('select[id="vessel"]').select('CMA-CGM-CONCORDE')
-      cy.get('input[id="eta"]').type('2025-10-10')
-      cy.contains('button', 'Register Shipment').click()
+      cy.get('[data-testid="new-shipment-button"]').click()
+      cy.get('[data-testid="customer-input"]').type('Test Customer')
+      cy.get('[data-testid="vessel-select"]').select('CMA-CGM-CONCORDE')
+      cy.get('[data-testid="eta-input"]').type('2025-10-10')
+      cy.get('[data-testid="submit-button"]').click()
 
       cy.wait('@createShipment')
+      cy.get('[data-testid="shipment-card"]').should('be.visible')
     })
 
     it('allows creating shipment with future date', () => {
-      cy.contains('button', 'New Shipment').click()
-      cy.get('input[id="customer"]').type('Test Customer')
-      cy.get('select[id="vessel"]').select('CMA-CGM-CONCORDE')
-      cy.get('input[id="eta"]').type('2025-10-11')
-      cy.contains('button', 'Register Shipment').click()
+      cy.get('[data-testid="new-shipment-button"]').click()
+      cy.get('[data-testid="customer-input"]').type('Test Customer')
+      cy.get('[data-testid="vessel-select"]').select('CMA-CGM-CONCORDE')
+      cy.get('[data-testid="eta-input"]').type('2025-10-11')
+      cy.get('[data-testid="submit-button"]').click()
 
       cy.wait('@createShipment')
+      cy.get('[data-testid="shipment-card"]').should('be.visible')
     })
   })
 
@@ -115,30 +113,30 @@ describe('Cargo Tracker', () => {
         body: 'Server error'
       }).as('createShipmentError')
 
-      cy.contains('button', 'New Shipment').click()
-      cy.get('input[id="customer"]').type('Test Customer')
-      cy.get('select[id="vessel"]').select('CMA-CGM-CONCORDE')
-      cy.get('input[id="eta"]').type('2025-03-25')
-      cy.contains('button', 'Register Shipment').click()
+      cy.get('[data-testid="new-shipment-button"]').click()
+      cy.get('[data-testid="customer-input"]').type('Test Customer')
+      cy.get('[data-testid="vessel-select"]').select('CMA-CGM-CONCORDE')
+      cy.get('[data-testid="eta-input"]').type('2025-03-25')
+      cy.get('[data-testid="submit-button"]').click()
 
-      cy.contains('Failed to create shipment')
+      cy.wait('@createShipmentError')
+      cy.get('[data-testid="error-state"]').should('be.visible')
     })
 
     it('handles ETA update errors', () => {
-        createShipment()
+      createShipment()
 
-      // Mock update error
       cy.intercept('PUT', 'http://localhost:9898/shipment/*', {
         statusCode: 500,
         body: 'Server error'
       }).as('updateShipmentError')
 
-      // Try to update ETA
-      cy.contains('button', 'Check Vessel ETA').click()
+      cy.get('[data-testid="check-eta-button"]').first().click()
       cy.wait('@getVessel')
-      cy.contains('button', 'Update Shipment ETA').click()
+      cy.get('[data-testid="update-eta-button"]').first().click()
 
-      cy.contains('Failed to update shipment')
+      cy.wait('@updateShipmentError')
+      cy.get('[data-testid="error-state"]').should('be.visible')
     })
   })
 }) 

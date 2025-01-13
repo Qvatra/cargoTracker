@@ -22,7 +22,6 @@ const today = computed(() => {
 async function handleSubmit() {
   error.value = null
   
-  // Validate ETA is not in the past
   if (form.value['shipment-eta'] < today.value) {
     error.value = 'ETA cannot be in the past'
     return

@@ -71,7 +71,6 @@ export const useShipmentStore = defineStore('shipments', {
 
   getters: {
     hasShipments: (state) => state.shipments.length > 0,
-    getShipmentById: (state) => (id: number) => 
-      state.shipments.find(s => s.id === id)
+    getShipmentById: (state) => (id: number) => state.shipments.find(s => s.id === id)
   }
 }) 
