@@ -28,7 +28,7 @@ export const useShipmentStore = defineStore('shipments', () => {
     error.value = null
     try {
       const newShipment = await api.createShipment(shipment)
-      shipments.value.push(newShipment)
+      shipments.value = [...(shipments.value || []), newShipment]
       return newShipment
     } catch (e) {
       error.value = 'Failed to create shipment'
