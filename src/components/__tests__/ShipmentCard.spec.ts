@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import ShipmentCard from '../ShipmentCard.vue'
+import ShipmentCard from '@/components/ShipmentCard.vue'
 
 describe('ShipmentCard', () => {
   const mockShipment = {
@@ -76,4 +76,4 @@ describe('ShipmentCard', () => {
     await wrapper.get('[data-testid="update-eta-button"]').trigger('click')
     expect(wrapper.emitted('update-eta')).toBeTruthy()
   })
-}) 
+})

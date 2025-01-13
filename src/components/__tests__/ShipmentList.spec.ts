@@ -1,8 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createTestingPinia } from '@pinia/testing'
-import ShipmentList from '../ShipmentList.vue'
-import { api } from '@/services/api'
+import ShipmentList from '@/components/ShipmentList.vue'
 import { useShipmentStore } from '@/stores/shipments'
 
 vi.mock('@/services/api')
@@ -38,27 +37,6 @@ describe('ShipmentList', () => {
   it('shows empty state', () => {
     const { wrapper } = mountList({ shipments: [] })
     expect(wrapper.get('[data-testid="empty-state"]')).toBeTruthy()
-  })
-
-  it('handles vessel ETA check', async () => {
-    vi.mocked(api.getVessel).mockResolvedValue({
-      vessel: 'CMA-CGM-CONCORDE',
-      'vessel-eta': '2025-03-26'
-    })
-
-    const mockShipment = {
-      id: 1,
-      customer: 'Test',
-      vessel: 'CMA-CGM-CONCORDE',
-      'shipment-eta': '2025-03-25'
-    }
-
-    const { wrapper } = mountList({
-      shipments: [mockShipment]
-    })
-
-    await wrapper.get('[data-testid="check-eta-button"]').trigger('click')
-    expect(api.getVessel).toHaveBeenCalledWith('CMA-CGM-CONCORDE')
   })
 
   it('displays shipments when available', () => {

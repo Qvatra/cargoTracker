@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useShipmentStore } from '@/stores/shipments'
 import { api } from '@/services/api'
-import ShipmentCard from './ShipmentCard.vue'
+import ShipmentCard from '@/components/ShipmentCard.vue'
 import type { EtaCheck } from '@/types/eta.ts'
 
 const store = useShipmentStore()

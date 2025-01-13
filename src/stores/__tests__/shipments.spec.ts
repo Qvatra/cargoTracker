@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { useShipmentStore } from '../shipments'
+import { useShipmentStore } from '@/stores/shipments'
 import { api } from '@/services/api'
 
 vi.mock('@/services/api', () => ({

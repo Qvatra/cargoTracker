@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createTestingPinia } from '@pinia/testing'
-import ShipmentForm from '../ShipmentForm.vue'
+import ShipmentForm from '@/components/ShipmentForm.vue'
 import { VALID_VESSELS } from '@/constants/vessels'
 import { useShipmentStore } from '@/stores/shipments'
 
@@ -35,7 +35,7 @@ describe('ShipmentForm', () => {
     // +1 for the default "Select a vessel" option
     expect(options).toHaveLength(VALID_VESSELS.length + 1)
     VALID_VESSELS.forEach(vessel => {
-      expect(options.some(opt => opt.text() === vessel)).toBe(true)
+      expect(options.map(o => o.text()).includes(vessel)).toBe(true)
     })
   })
 
@@ -64,4 +64,23 @@ describe('ShipmentForm', () => {
     
     expect(wrapper.emitted('submit')).toBeTruthy()
   })
-}) 
+
+  it('checks required fields', async () => {
+    const { wrapper, store } = mountForm()
+    const form = wrapper.get('[data-testid="shipment-form-container"]')
+    
+    // Submit the empty form
+    await form.trigger('submit')
+    
+    expect(store.createShipment).not.toHaveBeenCalled()
+    
+    // Verify required field validation using HTML5 validation
+    const customerInput = wrapper.get('[data-testid="customer-input"]')
+    const vesselSelect = wrapper.get('[data-testid="vessel-select"]')
+    const etaInput = wrapper.get('[data-testid="eta-input"]')
+    
+    expect((customerInput.element as HTMLInputElement).validity.valid).toBe(false)
+    expect((vesselSelect.element as HTMLSelectElement).validity.valid).toBe(false)
+    expect((etaInput.element as HTMLInputElement).validity.valid).toBe(false)
+  })
+})
