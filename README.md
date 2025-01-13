@@ -31,7 +31,7 @@ For production use, the following features should be implemented:
 
 ### UI Framework
 For this project, I chose to use only Tailwind CSS without a UI component framework like Vuetify. This decision was made for:
-- Simplicity and lightweight bundle size
+- Simplicity
 - Quick prototyping capabilities
 - Direct control over styling and components
 
@@ -44,8 +44,8 @@ However, for larger projects, a UI framework like Vuetify would be more appropri
 
 ### Testing
 For this project's scope, I chose:
-- Vitest for unit testing (fast, ESM-native, and Vue-compatible)
-- Cypress for end-to-end testing (reliable and developer-friendly)
+- Vitest for unit testing
+- Cypress for end-to-end testing
 
 For larger UI-rich projects, I would additionally recommend:
 - Storybook for component development and documentation
@@ -60,9 +60,7 @@ For this project's scope and time constraints I use native HTML5 form validation
 - Better i18n support
 
 ### State Management
-- Uses Pinia for state management
-- Follows Options API pattern for better maintainability
-- Clear separation of concerns between components and store
+- Uses Pinia for state management as recommended by Vue developers
 
 ## Project Setup
 
