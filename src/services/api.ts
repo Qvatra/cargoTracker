@@ -16,13 +16,8 @@ const API_BASE = 'http://localhost:9898'
 export const api = {
   async getAllShipments(): Promise<Shipment[]> {
     const response = await fetch(`${API_BASE}/shipment`)
-    return response.json()
-  },
-
-  async getShipment(id: number): Promise<Shipment> {
-    const response = await fetch(`${API_BASE}/shipment/${id}`)
     if (!response.ok) {
-      throw new Error('Shipment not found')
+      throw new Error('Failed to fetch shipments')
     }
     return response.json()
   },
