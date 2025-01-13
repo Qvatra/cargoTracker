@@ -65,7 +65,7 @@ For this project's scope and time constraints I use native HTML5 form validation
 ## Project Setup
 
 ```sh
-npm install
+npm ci
 ```
 
 ### Development Server
