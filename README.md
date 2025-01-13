@@ -10,18 +10,45 @@ A Vue.js application for tracking cargo shipments and managing ETAs.
 
 ## Technical Decisions
 
-### Form Validation
-For this project's scope and time constraints, we chose to use native HTML5 form validation instead of a more robust solution like Vuelidate. While Vuelidate would be more appropriate for larger projects due to its:
+### API Layer
+For this project, I chose to use the native Fetch API for simplicity and minimal dependencies. However, for larger, more complex projects, Axios would be more appropriate due to:
+- Automatic request/response transformation
+- Better error handling
+- Request/response interceptors
+- Request cancellation
+
+### Vessel list
+For simplicity, valid vessels are stored in a static TypeScript file (`vessels.ts`). In a production environment, this should be fetched from a backend API and paginated
+
+### UI Framework
+For this project, I chose to use only Tailwind CSS without a UI component framework like Vuetify. This decision was made for:
+- Simplicity and lightweight bundle size
+- Quick prototyping capabilities
+- Direct control over styling and components
+
+However, for larger projects, a UI framework like Vuetify would be more appropriate due to:
+- Pre-built accessible components
+- Consistent design language
+- Built-in responsive layouts
+- Rich ecosystem of components
+- Better maintainability at scale
+
+### Testing
+For this project's scope, I chose:
+- Vitest for unit testing (fast, ESM-native, and Vue-compatible)
+- Cypress for end-to-end testing (reliable and developer-friendly)
+
+For larger UI-rich projects, I would additionally recommend:
+- Storybook for component development and documentation
+- Chromatic for visual regression testing and UI review workflows
+
+### Validation
+For this project's scope and time constraints I use native HTML5 form validation instead of a more robust solution like Vuelidate. While Vuelidate would be more appropriate for larger projects due to its:
 - More complex validation rules
 - Custom error messages
 - Cross-field validation
 - Async validation support
 - Better i18n support
-
-The native validation sufficiently handles our basic needs:
-- Required fields
-- Date validation (preventing past dates)
-- Simple error messages
 
 ### State Management
 - Uses Pinia for state management
