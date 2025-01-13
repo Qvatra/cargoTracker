@@ -16,13 +16,15 @@ function toggleForm() {
       <header data-testid="app-header" class="py-8 sm:py-12">
         <div class="flex justify-between items-center border-b border-gray-200 pb-6">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">
+            <h1 class="text-3xl font-bold">
               Cargo Tracker
             </h1>
-            <p class="mt-2 text-sm text-gray-600">
+
+            <p class="mt-2 text-sm">
               Manage your shipments efficiently
             </p>
           </div>
+
           <button 
             data-testid="new-shipment-button"
             @click="toggleForm"
@@ -33,11 +35,13 @@ function toggleForm() {
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
             </span>
+
             <span v-else class="mr-2">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </span>
+
             {{ showForm ? 'Cancel' : 'New Shipment' }}
           </button>
         </div>
@@ -47,6 +51,7 @@ function toggleForm() {
         <div v-if="showForm" class="mb-8">
           <ShipmentForm @submit="showForm = false" />
         </div>
+        
         <ShipmentList />
       </main>
     </div>

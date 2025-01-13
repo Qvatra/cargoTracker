@@ -43,13 +43,13 @@ async function handleSubmit() {
 
 <template>
   <div data-testid="shipment-form" class="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md mb-8">
-    <h2 data-testid="form-title" class="text-2xl font-semibold mb-6 text-gray-900">
+    <h2 data-testid="form-title" class="text-2xl font-semibold mb-6">
       Register New Shipment
     </h2>
     
     <form @submit.prevent="handleSubmit" data-testid="shipment-form-container" class="space-y-4">
       <div>
-        <label for="customer" class="block text-sm font-medium text-gray-700 mb-1">
+        <label for="customer" class="block text-sm font-medium mb-1">
           Customer Name
         </label>
         <input 
@@ -63,7 +63,7 @@ async function handleSubmit() {
       </div>
       
       <div>
-        <label for="vessel" class="block text-sm font-medium text-gray-700 mb-1">
+        <label for="vessel" class="block text-sm font-medium mb-1">
           Vessel
         </label>
         <select
@@ -83,7 +83,7 @@ async function handleSubmit() {
       </div>
       
       <div>
-        <label for="eta" class="block text-sm font-medium text-gray-700 mb-1">
+        <label for="eta" class="block text-sm font-medium mb-1">
           ETA
         </label>
         <input 

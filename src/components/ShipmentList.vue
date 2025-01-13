@@ -68,11 +68,11 @@ async function updateShipmentEta(shipmentId: number) {
 
 <template>
   <div data-testid="shipment-list" class="max-w-4xl mx-auto">
-    <h2 data-testid="list-title" class="text-2xl font-semibold mb-6 text-gray-900">
+    <h2 data-testid="list-title" class="text-2xl font-semibold mb-6">
       Registered Shipments
     </h2>
     
-    <div v-if="loading" data-testid="loading-state" class="text-center py-8 text-gray-600">
+    <div v-if="loading" data-testid="loading-state" class="text-center py-8">
       Loading shipments...
     </div>
     
@@ -80,7 +80,7 @@ async function updateShipmentEta(shipmentId: number) {
       {{ error }}
     </div>
     
-    <div v-else-if="!shipments?.length" data-testid="empty-state" class="text-center py-8 text-gray-600">
+    <div v-else-if="!shipments?.length" data-testid="empty-state" class="text-center py-8">
       No shipments registered yet.
     </div>
     

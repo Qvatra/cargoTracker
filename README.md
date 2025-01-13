@@ -20,6 +20,15 @@ For this project, I chose to use the native Fetch API for simplicity and minimal
 ### Vessel list
 For simplicity, valid vessels are stored in a static TypeScript file (`vessels.ts`). In a production environment, this should be fetched from a backend API and paginated
 
+### Possible Future Improvements
+For production use, the following features should be implemented:
+- Pagination for large shipment lists
+- Filtering and sorting capabilities
+- Batch ETA checking functionality to identify all discrepancies at once
+- Automated periodic ETA checks
+- Notification system for ETA discrepancies
+- Export functionality for reports
+
 ### UI Framework
 For this project, I chose to use only Tailwind CSS without a UI component framework like Vuetify. This decision was made for:
 - Simplicity and lightweight bundle size
