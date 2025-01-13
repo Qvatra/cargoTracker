@@ -67,24 +67,24 @@ async function updateShipmentEta(shipmentId: number) {
 </script>
 
 <template>
-  <div class="max-w-4xl mx-auto">
-    <h2 class="text-2xl font-semibold mb-6 text-gray-900">
+  <div data-testid="shipment-list" class="max-w-4xl mx-auto">
+    <h2 data-testid="list-title" class="text-2xl font-semibold mb-6 text-gray-900">
       Registered Shipments
     </h2>
     
-    <div v-if="loading" class="text-center py-8 text-gray-600">
+    <div v-if="loading" data-testid="loading-state" class="text-center py-8 text-gray-600">
       Loading shipments...
     </div>
     
-    <div v-else-if="error" class="text-center py-8 text-error">
+    <div v-else-if="error" data-testid="error-state" class="text-center py-8 text-error">
       {{ error }}
     </div>
     
-    <div v-else-if="!shipments?.length" class="text-center py-8 text-gray-600">
+    <div v-else-if="!shipments?.length" data-testid="empty-state" class="text-center py-8 text-gray-600">
       No shipments registered yet.
     </div>
     
-    <div v-else class="space-y-4">
+    <div v-else data-testid="shipments-container" class="space-y-4">
       <ShipmentCard
         v-for="shipment in shipments"
         :key="shipment.id"

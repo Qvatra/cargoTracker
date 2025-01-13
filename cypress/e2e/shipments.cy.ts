@@ -87,6 +87,16 @@ describe('Cargo Tracker', () => {
       cy.get('@createShipment.all').should('have.length', 0)
     })
 
+    it('allows creating shipment with today date', () => {
+      cy.contains('button', 'New Shipment').click()
+      cy.get('input[id="customer"]').type('Test Customer')
+      cy.get('select[id="vessel"]').select('CMA-CGM-CONCORDE')
+      cy.get('input[id="eta"]').type('2025-10-10')
+      cy.contains('button', 'Register Shipment').click()
+
+      cy.wait('@createShipment')
+    })
+
     it('allows creating shipment with future date', () => {
       cy.contains('button', 'New Shipment').click()
       cy.get('input[id="customer"]').type('Test Customer')
